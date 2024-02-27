@@ -1,0 +1,45 @@
+Q1) What is the time complexity of the Water Jug problem?
+->  The time complexity of solving the Water Jug problem depends on the approach used.
+
+1. Brute Force: If we consider a brute force approach where we explore all possible states
+   of the jugs until we find the solution, the time complexity can be quite high. Since 
+   there can be at most \( O(m \times n) \) states (where \( m \) and \( n \) are the 
+   capacities of the jugs), and at each state, we have several possible actions (filling,
+   emptying, pouring), the time complexity can be exponential. Specifically, it can be
+   represented as \( O((mn)^d) \), where \( d \) is the depth of the search tree, which
+   can be at most \( O(m \times n) \) in the worst case.
+
+2. Optimized Approaches (such as BFS or DFS with memoization): 
+   By using optimized search algorithms like Breadth-First Search (BFS) or Depth-First Search
+   (DFS) with memoization to avoid revisiting the same states, we can significantly reduce the 
+   time complexity. These approaches typically have a time complexity of \( O(m \times n) \) or
+   \( O(m + n) \) because they explore only the reachable states and avoid redundant exploration.
+
+Therefore, the time complexity of the Water Jug problem can range from exponential to polynomial, 
+depending on the approach used.
+
+Q2) Why is DFS not used for solving a water jug problem?
+->  DFS has some drawbacks that make it less preferable compared to other algorithms like 
+Breadth-First Search (BFS) or even DFS with memoization (also known as Depth-First Search with 
+backtracking).
+
+Reasons why DFS might not be the best choice for solving the Water Jug problem:
+
+1. Completeness:DFS may not guarantee completeness, meaning it may not find a solution if one exists.
+   This is because DFS can get stuck in an infinite loop if the search space is infinite or if there 
+   are cycles in the state transition graph.
+
+2. Optimality:Even if DFS finds a solution, it may not be the shortest or optimal solution. DFS does 
+   not explore all possible states at a given depth level before moving to the next level, so it might
+   find a solution that is farther from the initial state compared to a shorter solution that BFS would find.
+
+3. Space Complexity: DFS can have a high space complexity, especially if the search tree is deep or if
+   there are many possible states. DFS stores the entire path from the root to the current node in memory,
+   which can lead to high memory usage.
+
+4. Performance:DFS may take longer to find a solution compared to BFS or other optimized search algorithms,
+   especially in cases where the optimal solution is closer to the initial state.
+
+While DFS can still be used to solve the Water Jug problem, it may not be the most efficient or effective 
+choice in terms of completeness, optimality, space complexity, and performance. Therefore, other algorithms 
+like BFS or DFS with memoization are often preferred for solving this problem.

@@ -1,43 +1,80 @@
+def dfs(x, y, target, visited, path):
+    if (x, y) == target:
+        return True
 
-def dfs_jug_problem(x, y, target_x, target_y, visited, path):
-    # Base case: if the target state is reached
-    if x == target_x or y == target_y:
-        return path + [(x, y)]
-
-    # Mark the current state as visited
     visited.add((x, y))
 
-    # Perform each operation (emptying, filling, pouring) and recursively search for the target state
-    operations = [
-        (0, y),           # Empty jug 1
-        (x, 0),           # Empty jug 2
-        (x, min(x+y, target_y)),  # Pour water from jug 1 to jug 2
-        (min(x+y, target_x), y),  # Pour water from jug 2 to jug 1
-        (min(x+y, target_x), max(0, y - (target_x - x))),  # Pour all water from jug 2 to jug 1
-        (max(0, x - (target_y - y)), min(x+y, target_y))   # Pour all water from jug 1 to jug 2
-    ]
+    # Fill Jug 1
+    if x < m and (m, y) not in visited:
+        path.append((m, y))
+        if dfs(m, y, target, visited, path):
+            return True
+        path.pop()
 
-    for operation in operations:
-        next_x, next_y = operation
-        if (next_x, next_y) not in visited:
-            result = dfs_jug_problem(next_x, next_y, target_x, target_y, visited, path + [(x, y)])
-            if result:
-                return result
+    # Fill Jug 2
+    if y < n and (x, n) not in visited:
+        path.append((x, n))
+        if dfs(x, n, target, visited, path):
+            return True
+        path.pop()
 
-    return None
+    # Empty Jug 1
+    if x > 0 and (0, y) not in visited:
+        path.append((0, y))
+        if dfs(0, y, target, visited, path):
+            return True
+        path.pop()
 
-def solve_jug_problem(jug1_capacity, jug2_capacity, target):
-    initial_state = (0, 0)
+    # Empty Jug 2
+    if y > 0 and (x, 0) not in visited:
+        path.append((x, 0))
+        if dfs(x, 0, target, visited, path):
+            return True
+        path.pop()
+
+    # Pour from Jug 1 to Jug 2
+    if x > 0:
+        amount_to_pour = min(x, n - y)
+        new_x, new_y = x - amount_to_pour, y + amount_to_pour
+        if (new_x, new_y) not in visited:
+            path.append((new_x, new_y))
+            if dfs(new_x, new_y, target, visited, path):
+                return True
+            path.pop()
+
+    # Pour from Jug 2 to Jug 1
+    if y > 0:
+        amount_to_pour = min(y, m - x)
+        new_x, new_y = x + amount_to_pour, y - amount_to_pour
+        if (new_x, new_y) not in visited:
+            path.append((new_x, new_y))
+            if dfs(new_x, new_y, target, visited, path):
+                return True
+            path.pop()
+
+    return False
+
+def find_path(m, n, d):
+    if d > max(m, n) or d == 0:
+        return None
+
     visited = set()
-    path = dfs_jug_problem(0, 0, 0, target, visited, [])
-    if path:
+    path = [(0, 0)]
+
+    if dfs(0, 0, (0, d), visited, path):
         return path
     else:
-        return "No solution possible."
+        return None
 
 # Example usage:
-jug1_capacity = 5
-jug2_capacity = 3
-target = 4
-solution_path = solve_jug_problem(jug1_capacity, jug2_capacity, target)
-print("Solution Path:", solution_path)
+m = 5  # Capacity of Jug 1
+n = 3  # Capacity of Jug 2
+d = 4  # Desired amount of water
+
+path = find_path(m, n, d)
+if path:
+    print("Path found:")
+    for state in path:
+        print(state)
+else:
+    print("No path exists to measure the desired amount.")
